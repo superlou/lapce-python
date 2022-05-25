@@ -22,6 +22,8 @@ register_plugin!(State);
 
 impl LapcePlugin for State {
     fn initialize(&mut self, info: serde_json::Value) {
+        eprintln!("Starting lapce-python plugin!");
+
         let info = serde_json::from_value::<PluginInfo>(info).unwrap();
         let arch = match info.arch.as_str() {
             "x86_64" => "x86_64",
@@ -35,8 +37,9 @@ impl LapcePlugin for State {
             _ => return,
         };
 
-        let file_name = String::from("jedi-language-server");
+        // Well, this is a bad idea
+        let file_name = String::from("/home/lsimons/.local/bin/jedi-language-server");
 
-        start_lsp(&file_name, "rust", info.configuration.options);
+        start_lsp(&file_name, "python", info.configuration.options);
     }
 }
