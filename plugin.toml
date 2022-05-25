@@ -1,0 +1,10 @@
+sname = "lapce-python"
+display-name = "Python"
+description = "Python for Lapce: powered by Jedi"
+version = "0.1.0"
+author = "superlou"
+repository = "superlou/lapce-python"
+wasm = "lapce-python.wasm"
+
+[configuration]
+language_id = "python"
