@@ -1,10 +1,14 @@
-sname = "lapce-python"
+name = "lapce-python"
 display-name = "Python"
-description = "Python for Lapce: powered by Jedi"
+description = "Python for Lapce: powered by https://github.com/python-lsp/python-lsp-server"
 version = "0.1.0"
-author = "superlou"
-repository = "superlou/lapce-python"
+author = "dholth"
+repository = "dholth/lapce-python"
 wasm = "lapce-python.wasm"
 
 [configuration]
+# language_id may not matter to lapce yet
 language_id = "python"
+executable = "/Users/dholth/.local/bin/pylsp"
+# options not passed to plugin?
+options = ["--log-file", "/Users/dholth/prog/lapce-python/log.txt"]
