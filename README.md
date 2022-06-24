@@ -1,6 +1,13 @@
 # lapce-python
 
-Fork of https://github.com/superlou/lapce-python
+The python language server pyls must be available on the path.
+Install the python language server by `pip install 'python-language-server[all]'`.
+
+If you are on Windows, try changing the `env_command` in `plugin.toml` to:
+
+```
+env_command = "echo \"PYLS_PATH=$(where pyls)\""
+```
 
 ## Build
 

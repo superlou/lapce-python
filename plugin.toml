@@ -7,8 +7,9 @@ repository = "dholth/lapce-python"
 wasm = "lapce-python.wasm"
 
 [configuration]
+# Hack to avoid needing to specify absolute path to pyls
+env_command = "echo \"PYLS_PATH=$(which pyls)\""
 # language_id may not matter to lapce yet
 language_id = "python"
-executable = "/Users/dholth/.local/bin/pylsp"
 # options not passed to plugin?
-options = ["--log-file", "/Users/dholth/prog/lapce-python/log.txt"]
+options = ["--log-file", "./pyls.txt"]

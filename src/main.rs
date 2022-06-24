@@ -1,3 +1,4 @@
+use std::env;
 use lapce_plugin::{register_plugin, send_notification, start_lsp, LapcePlugin};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -15,7 +16,6 @@ pub struct PluginInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Configuration {
     language_id: String,
-    executable: String,
     options: Option<Value>,
 }
 
@@ -45,11 +45,16 @@ impl LapcePlugin for State {
         //     }),
         // );
 
+        let pyls_path = match env::var("PYLS_PATH") {
+            Ok(var) => var,
+            Err(error) => panic!("Couldn't get PYLS_PATH: {error}")
+        };
+                
         // two copies of us are started
         serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
 
         start_lsp(
-            &info.configuration.executable,
+            &pyls_path,
             "python",
             info.configuration.options,
         );
