@@ -1,7 +1,7 @@
 # lapce-python
 
 The python language server pyls must be available on the path.
-Install the python language server by `pip install 'python-language-server[all]'`.
+Install the python language server by `pip install python-lsp-server`.
 
 If you are on Windows, try changing the `env_command` in `plugin.toml` to:
 
