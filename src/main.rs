@@ -49,9 +49,9 @@ impl LapcePlugin for State {
             Ok(var) => var,
             Err(error) => panic!("Couldn't get PYLSP_PATH: {error}"),
         };
-        dbg!(&pylsp_path);
+
         // two copies of us are started
-        serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
+        //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
 
         start_lsp(&pylsp_path, "python", info.configuration.options);
     }
