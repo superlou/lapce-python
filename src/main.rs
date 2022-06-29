@@ -46,13 +46,21 @@ impl LapcePlugin for State {
         // );
 
         let pylsp_path = match env::var("PYLSP_PATH") {
-            Ok(var) => var,
-            Err(error) => panic!("Couldn't get PYLSP_PATH: {error}"),
+            Ok(var) => match var.as_str() {
+                "" => {
+                    eprintln!("PYLSP_PATH is empty. Is python-lsp-server installed?");
+                    return;
+                }
+                _ => var,
+            },
+            Err(error) => {
+                eprintln!("Couldn't get PYLSP_PATH: {error}");
+                return;
+            }
         };
 
         // two copies of us are started
         //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
-
         start_lsp(&pylsp_path, "python", info.configuration.options);
     }
 }
