@@ -6,7 +6,7 @@ Install the python language server by `pip install python-lsp-server`.
 If you are on Windows, try changing the `env_command` in `plugin.toml` to:
 
 ```
-env_command = "echo \"PYLS_PATH=$(where pyls)\""
+env_command = "FOR /F "delims=" %i IN ('where pylsp') DO set PYLSP_PATH=%i"
 ```
 
 ## Build
