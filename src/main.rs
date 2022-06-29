@@ -45,14 +45,14 @@ impl LapcePlugin for State {
         //     }),
         // );
 
-        let pyls_path = match env::var("PYLS_PATH") {
+        let pylsp_path = match env::var("PYLSP_PATH") {
             Ok(var) => var,
-            Err(error) => panic!("Couldn't get PYLS_PATH: {error}"),
+            Err(error) => panic!("Couldn't get PYLSP_PATH: {error}"),
         };
-
+        dbg!(&pylsp_path);
         // two copies of us are started
         serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
 
-        start_lsp(&pyls_path, "python", info.configuration.options);
+        start_lsp(&pylsp_path, "python", info.configuration.options);
     }
 }
