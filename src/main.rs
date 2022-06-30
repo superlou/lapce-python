@@ -21,6 +21,18 @@ pub struct Configuration {
 
 register_plugin!(State);
 
+fn get_lsp_path() -> Result<String, String> {
+    match env::var("PYLSP_PATH") {
+        Ok(var) => match var.as_str() {
+            "" => Err(String::from(
+                "PYLSP_PATH is empty. Is python-lsp-server installed?",
+            )),
+            _ => Ok(var),
+        },
+        Err(error) => Err(format!("Couldn't get PYLSP_PATH: {}", error)),
+    }
+}
+
 impl LapcePlugin for State {
     fn initialize(&mut self, info: serde_json::Value) {
         let info = serde_json::from_value::<PluginInfo>(info).unwrap();
@@ -45,16 +57,10 @@ impl LapcePlugin for State {
         //     }),
         // );
 
-        let pylsp_path = match env::var("PYLSP_PATH") {
-            Ok(var) => match var.as_str() {
-                "" => {
-                    eprintln!("PYLSP_PATH is empty. Is python-lsp-server installed?");
-                    return;
-                }
-                _ => var,
-            },
+        let pylsp_path = match get_lsp_path() {
+            Ok(path) => path,
             Err(error) => {
-                eprintln!("Couldn't get PYLSP_PATH: {error}");
+                eprintln!("{}", &error);
                 return;
             }
         };
