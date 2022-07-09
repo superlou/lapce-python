@@ -48,15 +48,6 @@ impl LapcePlugin for State {
             _ => return,
         };
 
-        // lapce-rust does this; is there any handler?
-        // let lock_file = PathBuf::from("download.lock");
-        // send_notification(
-        //     "python",
-        //     &json!({
-        //         "path": &lock_file,
-        //     }),
-        // );
-
         let pylsp_path = match get_lsp_path() {
             Ok(path) => path,
             Err(error) => {
