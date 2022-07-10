@@ -9,6 +9,8 @@ If you are on Windows, try changing the `env_command` in `plugin.toml` to:
 env_command = "FOR /F "delims=" %i IN ('where pylsp') DO set PYLSP_PATH=%i"
 ```
 
+Additional functionality like type checking, refactoring, and formatting can be provided by installing dependencies as described in the [README for python-lsp-server](https://github.com/python-lsp/python-lsp-server).
+
 ## Build
 
 ```
