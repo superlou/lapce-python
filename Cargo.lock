@@ -44,8 +44,7 @@ checksum = "112c678d4050afce233f4f2852bb2eb519230b3cf12f33585275537d7e41578d"
 [[package]]
 name = "lapce-plugin"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa52eb90fd501e7b4c09605e1f6b23cd9abfd607c2537dd76ee12b4654df40a7"
+source = "git+https://github.com/lapce/lapce-plugin-rust?branch=master#48f0b0746c23fcd38a0c0aa37c7c85b15af4b4f0"
 dependencies = [
  "serde",
  "serde_json",
@@ -53,7 +52,7 @@ dependencies = [
 
 [[package]]
 name = "lapce-python"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "flate2",
  "lapce-plugin",

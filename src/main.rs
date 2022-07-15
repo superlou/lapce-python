@@ -1,7 +1,6 @@
 use lapce_plugin::{register_plugin, start_lsp, LapcePlugin};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::env;
 
 #[derive(Default)]
 struct State {}
@@ -21,18 +20,6 @@ pub struct Configuration {
 
 register_plugin!(State);
 
-fn get_lsp_path() -> Result<String, String> {
-    match env::var("PYLSP_PATH") {
-        Ok(var) => match var.as_str() {
-            "" => Err(String::from(
-                "PYLSP_PATH is empty. Is python-lsp-server installed?",
-            )),
-            _ => Ok(var),
-        },
-        Err(error) => Err(format!("Couldn't get PYLSP_PATH: {}", error)),
-    }
-}
-
 impl LapcePlugin for State {
     fn initialize(&mut self, info: serde_json::Value) {
         let info = serde_json::from_value::<PluginInfo>(info).unwrap();
@@ -48,16 +35,8 @@ impl LapcePlugin for State {
             _ => return,
         };
 
-        let pylsp_path = match get_lsp_path() {
-            Ok(path) => path,
-            Err(error) => {
-                eprintln!("{}", &error);
-                return;
-            }
-        };
-
         // two copies of us are started
         //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
-        start_lsp(&pylsp_path, "python", info.configuration.options);
+        start_lsp("pylsp", "python", info.configuration.options, true);
     }
 }
