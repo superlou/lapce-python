@@ -7,8 +7,6 @@ repository = "superlou/lapce-python"
 wasm = "lapce-python.wasm"
 
 [configuration]
-# Hack to avoid needing to specify absolute path to pyls
-env_command = "echo \"PYLSP_PATH=$(which pylsp)\""
 # language_id may not matter to lapce yet
 language_id = "python"
 # options not passed to plugin?
