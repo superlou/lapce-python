@@ -1,13 +1,14 @@
 name = "lapce-python"
 display-name = "Python"
 description = "Python for Lapce: powered by https://github.com/python-lsp/python-lsp-server"
-version = "0.2.0"
+version = "0.3.0"
 author = "various"
 repository = "superlou/lapce-python"
 wasm = "lapce-python.wasm"
 
 [configuration]
-# language_id may not matter to lapce yet
 language_id = "python"
-# options not passed to plugin?
-options = ["--log-file", "./pylsp.txt"]
+# lsp_exec="/path/to/lsp/executable" # Full path or name on PATH
+
+[configuration.options]
+# Options passed to the LSP server

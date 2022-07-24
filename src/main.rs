@@ -15,6 +15,7 @@ pub struct PluginInfo {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Configuration {
     language_id: String,
+    lsp_exec: Option<String>,
     options: Option<Value>,
 }
 
@@ -35,8 +36,18 @@ impl LapcePlugin for State {
             _ => return,
         };
 
+        let (exec_path, use_system_lsp) = match &info.configuration.lsp_exec {
+            Some(path) => (path.as_str(), true),
+            None => ("pylsp", true),
+        };
+
         // two copies of us are started
         //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
-        start_lsp("pylsp", "python", info.configuration.options, true);
+        start_lsp(
+            exec_path,
+            "python",
+            info.configuration.options,
+            use_system_lsp,
+        );
     }
 }
