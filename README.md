@@ -18,14 +18,14 @@ On OSX,
 
 ```
 pip install pipx
-pipx install pylsp
+pipx install python-lsp-server
 # adds ~/.local/bin/pylsp
 ```
 
 ```
-cd ~/.lapce/plugins
+cd ~/Library/Application Support/dev.lapce.Lapce/plugins # or dev.lapce.Lapce-Stable
+# exact files to link may vary with lapce releases
 mkdir lapce-python; cd lapce-python
-ln -s ~/prog/lapce-python/plugin.toml .
 ln -s ~/prog/lapce-python/target/wasm32-wasi/debug/lapce-python.wasm .
 ```
 
