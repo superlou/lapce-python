@@ -1,4 +1,11 @@
-use lapce_plugin::{register_plugin, start_lsp, LapcePlugin};
+use anyhow::Result;
+use lapce_plugin::{
+    psp_types::{
+        lsp_types::{request::Initialize, DocumentFilter, DocumentSelector, InitializeParams, Url},
+        Request,
+    },
+    register_plugin, LapcePlugin, PLUGIN_RPC,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -21,33 +28,69 @@ pub struct Configuration {
 
 register_plugin!(State);
 
+fn initialize(params: InitializeParams) -> Result<()> {
+    // PLUGIN_RPC.stderr("Initializing python-lapce");
+    
+    let document_selector: DocumentSelector = vec![DocumentFilter {
+        language: Some(String::from("python")),
+        pattern: Some(String::from("**.py")),
+        scheme: None,
+    }];
+
+    let server_args = vec![];
+    let server_path = Url::parse("urn:pylsp")?;
+    
+    // PLUGIN_RPC.stderr(&format!("path: {server_path}"));
+
+    PLUGIN_RPC.start_lsp(
+        server_path,
+        server_args,
+        document_selector,
+        params.initialization_options,
+    );
+
+    Ok(())
+}
+
 impl LapcePlugin for State {
-    fn initialize(&mut self, info: serde_json::Value) {
-        let info = serde_json::from_value::<PluginInfo>(info).unwrap();
-        let _arch = match info.arch.as_str() {
-            "x86_64" => "x86_64",
-            "aarch64" => "aarch64",
-            _ => return,
-        };
-        let _os = match info.os.as_str() {
-            "linux" => "unknown-linux-gnu",
-            "macos" => "apple-darwin",
-            "windows" => "pc-windows-msvc",
-            _ => return,
-        };
-
-        let (exec_path, use_system_lsp) = match &info.configuration.lsp_exec {
-            Some(path) => (path.as_str(), true),
-            None => ("pylsp", true),
-        };
-
-        // two copies of us are started
-        //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
-        start_lsp(
-            exec_path,
-            "python",
-            info.configuration.options,
-            use_system_lsp,
-        );
+    fn handle_request(&mut self, _id: u64, method: String, params: Value) {
+        match method.as_str() {
+            Initialize::METHOD => {
+                let params: InitializeParams = serde_json::from_value(params).unwrap();
+                let _ = initialize(params);
+            }
+            _ => {}
+        }
     }
 }
+
+// impl LapcePlugin for State {
+//     fn initialize(&mut self, info: serde_json::Value) {
+//         let info = serde_json::from_value::<PluginInfo>(info).unwrap();
+//         let _arch = match info.arch.as_str() {
+//             "x86_64" => "x86_64",
+//             "aarch64" => "aarch64",
+//             _ => return,
+//         };
+//         let _os = match info.os.as_str() {
+//             "linux" => "unknown-linux-gnu",
+//             "macos" => "apple-darwin",
+//             "windows" => "pc-windows-msvc",
+//             _ => return,
+//         };
+
+//         let (exec_path, use_system_lsp) = match &info.configuration.lsp_exec {
+//             Some(path) => (path.as_str(), true),
+//             None => ("pylsp", true),
+//         };
+
+//         // two copies of us are started
+//         //serde_json::to_writer_pretty(std::io::stderr(), &info).unwrap();
+//         start_lsp(
+//             exec_path,
+//             "python",
+//             info.configuration.options,
+//             use_system_lsp,
+//         );
+//     }
+// }
