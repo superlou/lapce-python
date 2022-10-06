@@ -1,5 +1,5 @@
 name = "lapce-python"
-version = "0.3.0"
+version = "0.3.1"
 author = "various"
 display-name = "Python (python-lsp-server)"
 description = "Python for Lapce using python-lsp-server"
