@@ -9,6 +9,6 @@ icon = "python-logo-only.png"
 [activation]
 language = ["python"]
 
-[config."volt.serverPath"]
+[config."serverPath"]
 default = ""
-description = "Path to python-language-server"
+description = "Path to python-language-server. When empty, will attempt to automatically locate binary"

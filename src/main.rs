@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use lapce_plugin::{
     psp_types::{
         lsp_types::{request::Initialize, DocumentFilter, DocumentSelector, InitializeParams, Url},
@@ -13,15 +13,6 @@ struct State {}
 
 register_plugin!(State);
 
-macro_rules! ok {
-    ( $x:expr ) => {
-        match ($x) {
-            Ok(v) => v,
-            Err(e) => return Err(anyhow!(e)),
-        }
-    };
-}
-
 fn initialize(params: InitializeParams) -> Result<()> {
     // PLUGIN_RPC.stderr("Initializing python-lapce");
 
@@ -33,26 +24,30 @@ fn initialize(params: InitializeParams) -> Result<()> {
 
     let server_args = vec![];
 
-    if let Some(options) = params.initialization_options.as_ref() {
-        if let Some(volt) = options.get("volt") {
-            if let Some(server_path) = volt.get("serverPath") {
-                if let Some(server_path) = server_path.as_str() {
-                    if !server_path.is_empty() {
-                        let server_uri = ok!(Url::parse(&format!("urn:{}", server_path)));
-                        PLUGIN_RPC.start_lsp(
-                            server_uri,
-                            server_args,
-                            document_selector,
-                            params.initialization_options,
-                        );
-                        return Ok(());
-                    }
-                }
+    let server_path = params
+        .initialization_options
+        .as_ref()
+        .and_then(|options| options.get("serverPath"))
+        .and_then(|server_path| server_path.as_str())
+        .and_then(|server_path| {
+            if !server_path.is_empty() {
+                Some(server_path)
+            } else {
+                None
             }
-        }
+        });
+
+    if let Some(server_path) = server_path {
+        PLUGIN_RPC.start_lsp(
+            Url::parse(&format!("urn:{}", server_path))?,
+            server_args,
+            document_selector,
+            params.initialization_options,
+        );
+        return Ok(());
     }
 
-    let server_path = Url::parse("urn:pylspz")?;
+    let server_path = Url::parse("urn:pylsp")?;
 
     // PLUGIN_RPC.stderr(&format!("path: {server_path}"));
 
