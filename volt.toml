@@ -1,5 +1,5 @@
 name = "lapce-python"
-version = "0.3.2"
+version = "0.3.3"
 author = "various"
 display-name = "Python (python-lsp-server)"
 description = "Python for Lapce using python-lsp-server"
@@ -8,3 +8,7 @@ icon = "python-logo-only.png"
 
 [activation]
 language = ["python"]
+
+[config."serverPath"]
+default = ""
+description = "Path to python-language-server. When empty, will attempt to automatically locate binary"
